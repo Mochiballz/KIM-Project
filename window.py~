@@ -1,0 +1,57 @@
+
+from tkinter import *
+from tkinter import ttk
+
+from PIL import Image, ImageTk 
+
+class Application(ttk.Frame):
+    def __init__(self, master=None, k=None):
+        super().__init__(master)
+        self.master = master
+        self.kensuke = k
+        self.pack()
+        self.create_widgets()
+
+    def create_widgets(self):
+        # Implement styles for widgets
+        self.frameStyle = ttk.Style(self)
+        self.frameStyle.configure("TLabel", foreground="white", background="gray", padding=10)
+
+        self.scaleStyle = ttk.Style(self)
+        self.scaleStyle.configure("Horizontal.TScale", troughcolor="#F0F0F0", background="red",
+                                  sliderthickness=20, borderwidth=2) 
+
+        # Create label boxes for original and distorted image
+        self.original = ttk.Label(self, text="This is a test", style="TLabel")
+        self.original.grid(row=0, column=0, sticky=N+S+W)
+
+        self.distorted = ttk.Label(self, text="Yet another test",  style="TLabel")
+        self.distorted.grid(row=0, column=4, sticky=N+S+E)
+
+        # Cell position sliders (x coordinate, y coordinate)
+
+        self.x = ttk.Scale(self, orient="horizontal", length=200, style="Horizontal.TScale")
+        self.y = ttk.Scale(self, orient="horizontal", length=200, style="Horizontal.TScale")
+
+        self.x.grid(row=4, column=0)
+        self.y.grid(row=4, column=2)
+        
+        # Cell size sliders (width, height)
+
+        # Padding slider (one for both x and y)
+
+        # Row input box
+
+        # Column input box
+
+        # Radio button for resizing distorted image
+
+    def set_kensuke(self, k=None):
+        if k is None:
+            return
+        self.kensuke = k
+        pass
+
+root = Tk()
+app = Application(master=root)
+app.mainloop()
