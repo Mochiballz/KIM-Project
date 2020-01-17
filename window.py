@@ -1,8 +1,8 @@
 
 from tkinter import *
 from tkinter import ttk
-
-from PIL import Image, ImageTk 
+from PIL import Image, ImageTk
+from kensuke import *
 
 class Application(ttk.Frame):
     def __init__(self, master=None, k=None):
@@ -13,25 +13,33 @@ class Application(ttk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        img = Image.open("sample_imgs/kinkakuji.jpg")
-        tkimage = ImageTk.PhotoImage(img)
+        img_original = self.kensuke.image
+        img_distorted = self.kensuke.collage
+        
+        tkorigin = ImageTk.PhotoImage(img_original)
+        tkdistort = ImageTk.PhotoImage(img_distorted)
         
         # Implement styles for widgets
-        self.frameStyle = ttk.Style(self)
-        self.frameStyle.configure("TLabel", foreground="white", background="gray", relief="raised",
-                                  borderwidth=4, image=tkimage)
-        self.frameStyle.image = tkimage
+        self.originalStyle = ttk.Style(self)
+        self.originalStyle.configure("OG.TLabel", foreground="white", background="gray", relief="raised",
+                                     borderwidth=4, image=tkorigin)
+        self.originalStyle.image = tkorigin
+
+        self.distortedStyle = ttk.Style(self)
+        self.distortedStyle.configure("DS.TLabel", foreground="white", background="gray", relief="raised",
+                                      borderwidth=4, image=tkdistort)
+        self.distortedStyle.image = tkdistort
 
         self.scaleStyle = ttk.Style(self)
         self.scaleStyle.configure("Horizontal.TScale", troughcolor="#F0F0F0", background="green",
                                   sliderthickness=20, borderwidth=2) 
 
         # Create label boxes for original and distorted image
-        self.original = ttk.Label(self, text="This is a test", style="TLabel")
+        self.original = ttk.Label(self, style="OG.TLabel")
         self.original.grid(row=0, column=0, columnspan=2, padx=20, pady=20, sticky=N+S+E+W)
         self.original.grid_propagate(0)
 
-        self.distorted = ttk.Label(self, text="Yet another test",  style="TLabel")
+        self.distorted = ttk.Label(self, style="DS.TLabel")
         self.distorted.grid(row=0, column=2, columnspan=2, padx="0 20", pady=20, sticky=N+S+E+W)
         self.distorted.grid_propagate(0)
         
@@ -66,5 +74,9 @@ class Application(ttk.Frame):
         pass
 
 root = Tk()
-app = Application(master=root)
+ktest = Kensuke(create_image("sample_imgs/kinkakuji.jpg"), 10, 12, 20, 10, 10, 20, 20)
+ktest.create_cells()
+ktest.assemble_cells()
+
+app = Application(root, ktest)
 app.mainloop()

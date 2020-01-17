@@ -1,8 +1,6 @@
 import sys
 import math
 
-from tkinter import *
-from tkinter import ttk
 from PIL import Image, ImageTk
 
 '''
@@ -17,7 +15,7 @@ from PIL import Image, ImageTk
 # The 'image' parameter must take a PIL image, NOT a string filename
 class Kensuke(object):
     # Constructor
-    def __init__(self, image, rows=None, cols=None, p=0, x=0, y=0, w=2, h=2):
+    def __init__(self, image, rows=None, cols=None, p=2, x=0, y=0, w=2, h=2):
         self.image = image
         self.collage = None
         self.cells = []
@@ -80,21 +78,6 @@ def create_image(filename):
     except Exception as e:
         print(e)
 
-# Display image through Tkinter
-def display_image(image):
-    root = Tk()
-    root.title("Kensuke")
-    tkimage = ImageTk.PhotoImage(image)
-    Label(root, image=tkimage).pack()
-    root.mainloop()
     
-
-ken_test = Kensuke(create_image("dotonburi.jpg"), 240, 320, 4)
-ken_test.create_cells()
-ken_test.assemble_cells()
-
-ken_size = ken_test.collage.size
-ken_resize = ken_test.collage.resize((ken_size[0] * 2, ken_size[1] * 2))
-display_image(ken_test.collage)
 
 
