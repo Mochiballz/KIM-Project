@@ -12,9 +12,18 @@ class Application(ttk.Frame):
         self.grid()
         self.create_widgets()
 
+    def create_styles(self):
+        pass
+        
+    def create_image_viewports(self):
+        pass
+
+    def create_param_controls(self):
+        pass
+
     def create_widgets(self):
         img_original = self.kensuke.image
-        img_distorted = self.kensuke.collage
+        img_distorted = self.kensuke.distorted
         
         tkorigin = ImageTk.PhotoImage(img_original)
         tkdistort = ImageTk.PhotoImage(img_distorted)
@@ -77,6 +86,7 @@ root = Tk()
 ktest = Kensuke(create_image("sample_imgs/kinkakuji.jpg"), 10, 12, 20, 10, 10, 20, 20)
 ktest.create_cells()
 ktest.assemble_cells()
+ktest.resize_distorted()
 
 app = Application(root, ktest)
 app.mainloop()

@@ -17,7 +17,7 @@ class Kensuke(object):
     # Constructor
     def __init__(self, image, rows=None, cols=None, p=2, x=0, y=0, w=2, h=2):
         self.image = image
-        self.collage = None
+        self.distorted = None
         self.cells = []
         
         self.rows = rows
@@ -56,7 +56,7 @@ class Kensuke(object):
         height = len(self.cells) * self.h
         size = (width, height)
         
-        self.collage = Image.new("RGB", size)
+        self.distorted = Image.new("RGB", size)
 
         for i in range(len(self.cells)):
             for j in range(len(self.cells[0])):
@@ -67,7 +67,14 @@ class Kensuke(object):
                 lower = upper + self.h
 
                 box = (left, upper, right, lower)
-                self.collage.paste(self.cells[i][j], box)
+                self.distorted.paste(self.cells[i][j], box)
+
+    def resize_distorted(self, mode=0):
+        image_dim = self.image.size
+        distort_dim = self.distorted.size
+        if mode == 0:
+            self.distorted = self.distorted.resize(image_dim)
+        pass
                 
 
 # Returns a PIL image variable
