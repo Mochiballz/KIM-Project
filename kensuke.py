@@ -32,7 +32,8 @@ class Kensuke(object):
     # Function will create image cells based on instance's parameters
     def create_cells(self):
         if self.rows and self.cols:
-            
+            if len(self.cells) > 0:
+                self.cells = []
             for i in range(self.rows):
                 row = []
                 for j in range(self.cols):
