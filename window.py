@@ -41,6 +41,7 @@ class Application(ttk.Frame):
         MAX_Y = 100
         MAX_W = 50
         MAX_H = 50
+        MAX_P = 50
         
         # Sliders for the top left position of cell array (x, y) w/ labels
         self.x = ttk.Scale(self, orient="horizontal", style="Horizontal.TScale", length=SCALE_LENGTH,
@@ -71,20 +72,28 @@ class Application(ttk.Frame):
         self.height.grid(row=2, column=2, columnspan=2, padx="10 20", pady="10 20", sticky=N+S+E)
         
         # Padding slider (one for both x and y)
+        self.padding = ttk.Scale(self, orient="horizontal", style="Horizontal.TScale", length=SCALE_LENGTH,
+                                 from_=1, to=MAX_P)
+        self.p_label = ttk.Label(self, text="Cell Padding: ")
 
+        self.p_label.grid(row=1, column=4, columnspan=1, sticky=N+S+W)
+        self.padding.grid(row=1, column=4, columnspan=2, padx="0 10", sticky=N+S+E)
+        
         # Row input box
 
         # Column input box
 
         # Radio button for resizing distorted image
 
-        self.set_control_values()
+        if self.kensuke is not None:
+            self.set_control_values()
 
         # Implement update function when widget's state is changed
         self.x.configure(command=self.update)
         self.y.configure(command=self.update)
         self.width.configure(command=self.update)
         self.height.configure(command=self.update)
+        self.padding.configure(command=self.update)
 
     def create_styles(self):
         self.style = ttk.Style(self)
@@ -110,6 +119,8 @@ class Application(ttk.Frame):
         image_dim = self.kensuke.image.size
         if image_dim[0] > int(self.origin_view["width"]):
             self.origin_view["width"] = image_dim[0]
+        if image_dim[1] > int(self.origin_view["height"]):
+            self.origin_view["height"] = image_dim[1]
 
         # Original image draw
         tkimage = ImageTk.PhotoImage(self.kensuke.image)
@@ -127,6 +138,8 @@ class Application(ttk.Frame):
         distort_dim = self.kensuke.distorted.size
         if distort_dim[0] > int(self.distort_view["width"]):
             self.distort_view["width"] = distort_dim[0]
+        if distort_dim[1] > int(self.distort_view["height"]):
+            self.distort_view["height"] = distort_dim[1]
 
         # Distorted image draw
         tkdistort = ImageTk.PhotoImage(self.kensuke.distorted)
@@ -152,6 +165,11 @@ class Application(ttk.Frame):
         self.y["value"] = temp.y
         self.width["value"] = temp.w
         self.height["value"] = temp.h
+        self.padding["value"] = temp.padding
+
+        temp_dim = temp.image.size
+        self.x["to"] = temp_dim[0]
+        self.y["to"] = temp_dim[1]
 
     def set_kensuke(self, k=None):
         if k is None:
@@ -165,6 +183,7 @@ class Application(ttk.Frame):
         self.kensuke.y = self.y.get()
         self.kensuke.w = int(self.width.get())
         self.kensuke.h = int(self.height.get())
+        self.kensuke.padding = self.padding.get()
 
         # Create new cells and assemble them
         self.kensuke.create_cells()
