@@ -133,6 +133,7 @@ class Application(ttk.Frame):
         self.distort_view.create_image(0, 0, anchor=NW, image=tkdistort)
         self.distort_view.image = tkdistort
 
+    # Draws outlines for cells onto original image
     def draw_grid(self):
         for i in range(self.kensuke.rows):
             for j in range(self.kensuke.cols):
@@ -144,6 +145,7 @@ class Application(ttk.Frame):
 
                 self.origin_view.create_rectangle(x0, y0, x1, y1, outline="cyan")
 
+    # Grabs values from Kensuke object and sets them in corresponding scales
     def set_control_values(self):
         temp = self.kensuke
         self.x["value"] = temp.x
@@ -156,6 +158,7 @@ class Application(ttk.Frame):
             return
         self.kensuke = k
 
+    # Update function when widgets' (related to distortion parameters) states change
     def update(self, value):
         # Grabbing values from all scales
         self.kensuke.x = self.x.get()
