@@ -24,34 +24,44 @@ class Kensuke(object):
         self.cols = cols
         self.padding = p
 
+        # Starting coordinates (x,y) & cell width/height for each cutout
         self.x = x
         self.y = y
         self.w = w
         self.h = h
 
+    def create_gridbox(self):
+        grid_w = (self.cols * self.w) + ((self.cols - 1) * self.padding) + self.x
+        grid_h = (self.rows * self.h) + ((self.rows - 1) * self.padding) + self.y
+        gridbox = (self.x, self.y, grid_w, grid_h)
+        return gridbox
+    
     # Function will create image cells based on instance's parameters
     def create_cells(self):
-        if self.rows and self.cols:
+        if self.rows and self.cols: # Checks if rows or cols are empty
+            
             if len(self.cells) > 0:
-                self.cells = []
+                self.cells = [] # Creates new cell grid
             for i in range(self.rows):
                 row = []
                 for j in range(self.cols):
-
+                    
                     left  = self.x + (j * self.w) + (j * self.padding)
                     upper = self.y + (i * self.h) + (i * self.padding)
                     right = left + self.w
                     lower = upper + self.h
-
+                    
                     box = (left, upper, right, lower)
                     cell = self.image.crop(box)
                     row.append(cell)
-                    
+                        
                 self.cells.append(row)
+                    
         else:
             print("Your rows and/or columns are not defined")
 
-    # Collages all cells into new image, defining it in the instance's 'collage' variable
+    # Collages all cells into new image, defining it in the instance's 'distorted' variable
+    # Constructs cells in default 'lower resolution' grid pattern
     def assemble_cells(self):
         width = len(self.cells[0]) * self.w
         height = len(self.cells) * self.h
@@ -76,6 +86,12 @@ class Kensuke(object):
         if mode == 0:
             self.distorted = self.distorted.resize(image_dim)
         pass
+
+    # Checks if cell grid will fit within original image dimensions --> (should be placed before distortion)
+    def inside_image_dim(self):
+        image_dim = self.image.size
+        grid_dim = self.create_gridbox()
+        return (image_dim[0] <= grid_dim[0] and image_dim[1] <= grid_dim[1]) and (image_dim[2] >= grid_dim[2] and image_dim[3] >= grid_dim[3])
                 
 
 # Returns a PIL image variable

@@ -183,7 +183,7 @@ class Application(ttk.Frame):
 
                 self.origin_view.create_rectangle(x0, y0, x1, y1, outline="cyan")
 
-    # Grabs values from Kensuke object and sets them in corresponding scales
+    # Grabs values from Kensuke object and sets them in corresponding widgets
     def set_control_values(self):
         temp = self.kensuke
         self.x["value"] = temp.x
@@ -215,8 +215,11 @@ class Application(ttk.Frame):
         self.kensuke.cols = int(self.cols.get()) if self.cols.get() != '' else self.kensuke.cols
 
         # Create new cells and assemble them
-        self.kensuke.create_cells()
-        self.kensuke.assemble_cells()
+        if self.kensuke.inside_image_dim():
+            self.kensuke.create_cells()
+
+            self.kensuke.assemble_cells()
+            self.kensuke.resize_distorted()
 
         # Redraw viewports
         self.draw_canvases()
@@ -226,6 +229,7 @@ root = Tk()
 ktest = Kensuke(create_image("sample_imgs/tree_frog.jpg"), 10, 12, 20, 10, 10, 20, 20)
 ktest.create_cells()
 ktest.assemble_cells()
+ktest.resize_distorted()
 
 app = Application(root, ktest)
 app.mainloop()
